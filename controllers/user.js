@@ -34,20 +34,39 @@ exports.deleteUser = async (req, res) => {
 exports.addPlayerToTeam = async (req,res) => {
   try {
     const user = await UserModal.findById(req.params.userId);
-    const player = await PlayerModal.findById(req.params.playerId);
+    const player1 = await PlayerModal.findById(req.params.playerId1);
+    const player2 = await PlayerModal.findById(req.params.playerId2);
+    const player3 = await PlayerModal.findById(req.params.playerId3);
+    const player4 = await PlayerModal.findById(req.params.playerId4);
+    const player5 = await PlayerModal.findById(req.params.playerId5);
 
     if (!user) {
-      return res.status(404).send({ message: 'User not found' });
+      return res.status(404).send({ message: 'User not found!' });
     }
 
-    if (!player) {
+    if (!player1) {
+      return res.status(404).send({ message: 'Player not found!' });
+    }
+
+    if (!player2) {
+      return res.status(404).send({ message: 'Player not found!' });
+    }
+
+    if (!player3) {
+      return res.status(404).send({ message: 'Player not found!' });
+    }
+    if (!player4) {
+      return res.status(404).send({ message: 'Player not found!' });
+    }
+    if (!player5) {
       return res.status(404).send({ message: 'Player not found' });
     }
 
-    user.team.push(player._id);
+
+    user.team.push(player1._id,player2._id,player3._id,player4._id,player5._id);
     await user.save();
 
-    res.send({ message: 'Player added to team' });
+    res.send({ message: 'Team comfirmed',res: user });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Server error' });

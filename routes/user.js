@@ -7,7 +7,7 @@ const metamask = require('../controllers/metamask');
 const user = require('../controllers/user');
 const { body } = require('express-validator');
 
-router.post("/AddPlayerToTeam/:userId/team/:playerId", user.addPlayerToTeam);
+router.post("/AddPlayerToTeam/:userId/team/:playerId1/:playerId2/:playerId3/:playerId4/:playerId5", user.addPlayerToTeam);
 router.post("/signin",auth, user.signin);
 router.post("/signup",multer,
 [validate(
