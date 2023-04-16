@@ -1,4 +1,3 @@
-// const multer = require ('multer');
 const PlayerModal = require ('../models/player');
 
 exports.getPlayers = async (req, res) => {
