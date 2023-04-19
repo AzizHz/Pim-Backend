@@ -3,9 +3,6 @@ const PlayerModal = require('../models/player');
 const Data = require('../models/NbaPlayerModel')
 
 
-const secret = process.env.secret;
-const BASE_URL = process.env.BASE_URL;
-
 exports.getUsers = async (req, res) => {
   try {
 
@@ -74,17 +71,15 @@ exports.removePlayerFromTeam = async (req, res) => {
   } catch (error) {
     res.status(500).send({ message: 'Server error' });
   }
-};
+}
 
 exports.signup = async (req, res) => {
   const { nickname, accountpk } = req.body;
   try {
-    const oldUser = await UserModal.findOne({ email });
+    const oldUser = await UserModal.findOne({ accountpk });
 
     if (oldUser)
-      return res.status(400).json({ message: "User already exists" });
-
-    const hashedPassword = await bcrypt.hash(password, 12);
+      return res.status(400).json({ message: "Account already exists" });
 
 
     const result = await UserModal.create({
@@ -97,10 +92,6 @@ exports.signup = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-/*
-export const forgetPass = async (req, res) => {
-*/
-
 
 exports.updateUserrById = async (req, res) => {
   try {
@@ -121,7 +112,7 @@ exports.updateUserrById = async (req, res) => {
     );
   } catch (error) {
     res.status(500).json({
-      message: "ghalta",
+      message: "id ghalet ya weldi weeeey",
     });
   }
 };

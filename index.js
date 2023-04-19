@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const morgan = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser')
 const userRouter = require('./routes/user.js');
@@ -18,7 +19,7 @@ const DataRouter = require('./routes/DataRouter.js');
 dotenv.config();
 const app = express();
 app.use(cors());
-
+app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 const CONNECTION_URL = process.env.CONNECTION_URL;
