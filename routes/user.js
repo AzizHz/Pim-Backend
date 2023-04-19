@@ -1,11 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const multer = require('../middleware/multer');
-const validate = require('../middleware/error-handler');
-const metamask = require('../controllers/metamask');
 const user = require('../controllers/user');
-const { body } = require('express-validator');
 
 //router.get("/getUsers", user.getUsers);
 //router.delete("/deleteUser/:id", user.deleteUser);

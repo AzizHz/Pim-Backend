@@ -1,7 +1,6 @@
 const axios = require('axios');
 const express = require('express');
 
-const player = require('../models/player');
 const router = express.Router();
 
 const config = {
