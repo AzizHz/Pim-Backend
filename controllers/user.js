@@ -1,71 +1,60 @@
-const UserModal = require ('../models/user');
-const PlayerModal = require ('../models/player');
+const UserModal = require('../models/user');
+const PlayerModal = require('../models/player');
+const Data = require('../models/NbaPlayerModel')
 
 
 exports.getUsers = async (req, res) => {
-  try {   
+  try {
 
-    const users = await UserModal.find();    
+    const users = await UserModal.find();
     res.status(200).json(users);
-} catch (error) {
- 
+  } catch (error) {
+
     res.status(404).json({ message: error.message });
-}}
+  }
+}
 
 exports.deleteUser = async (req, res) => {
-  try {   
+  try {
 
-     await UserModal.findByIdAndDelete(req.params.id);    
+    await UserModal.findByIdAndDelete(req.params.id);
     res.status(200).json("user deleted");
-} catch (error) {
+  } catch (error) {
 
     res.status(404).json({ message: error.message });
-}
+  }
 }
 
-exports.addPlayerToTeam = async (req,res) => {
+exports.addPlayerToTeam = async (req, res) => {
   try {
-    const user = await UserModal.findById(req.params.userId);
-    const player1 = await PlayerModal.findById(req.params.playerId1);
-    const player2 = await PlayerModal.findById(req.params.playerId2);
-    const player3 = await PlayerModal.findById(req.params.playerId3);
-    const player4 = await PlayerModal.findById(req.params.playerId4);
-    const player5 = await PlayerModal.findById(req.params.playerId5);
-
-    if (!user) {
-      return res.status(404).send({ message: 'User not found!' });
-    }
-
-    if (!player1) {
-      return res.status(404).send({ message: 'Player not found!' });
-    }
-
-    if (!player2) {
-      return res.status(404).send({ message: 'Player not found!' });
-    }
-
-    if (!player3) {
-      return res.status(404).send({ message: 'Player not found!' });
-    }
-    if (!player4) {
-      return res.status(404).send({ message: 'Player not found!' });
-    }
-    if (!player5) {
-      return res.status(404).send({ message: 'Player not found' });
-    }
 
 
-    user.team.push(player1._id,player2._id,player3._id,player4._id,player5._id);
-    await user.save();
+    const players = [req.params.playerId1, req.params.playerId2, req.params.playerId3, req.params.playerId4, req.params.playerId5]
+    data = await Data.findOne({}, null, { sort: { _id: -1 } });
 
-    res.send({ message: 'Team comfirmed',res: user });
+    const filteredData = data.players.filter(obj => players.includes(obj.PLAYER_ID.toString()));
+    UserModal.findByIdAndUpdate(req.params.userId, { $set: { team: [] } }, { new: true }, (error, user) => {
+      if (error) {
+        console.log(error);
+      } else {
+        user.team.push(...filteredData);
+        user.save((error, updatedUser) => {
+          if (error) {
+            console.log(error);
+          } else {
+            res.send({ message: 'Team comfirmed', res: updatedUser });
+
+          }
+        });
+      }
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Server error' });
   }
 }
 
-exports.removePlayerFromTeam = async (req,res) => {
+exports.removePlayerFromTeam = async (req, res) => {
   try {
     const user = await UserModal.findById(req.params.userId);
     if (!user) {
@@ -85,7 +74,7 @@ exports.removePlayerFromTeam = async (req,res) => {
 }
 
 exports.signup = async (req, res) => {
-  const { nickname,accountpk}= req.body;
+  const { nickname, accountpk } = req.body;
   try {
     const oldUser = await UserModal.findOne({ accountpk });
 
@@ -98,7 +87,7 @@ exports.signup = async (req, res) => {
       accountpk
     });
 
-    res.status(200).json({result});
+    res.status(200).json({ result });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -106,7 +95,7 @@ exports.signup = async (req, res) => {
 
 exports.updateUserrById = async (req, res) => {
   try {
-    let foundUser = await UserModal.findOne({ _id: req.params.id }); 
+    let foundUser = await UserModal.findOne({ _id: req.params.id });
 
     let updatedUser = await UserModal.findOneAndUpdate(
       { _id: req.params.id },
@@ -129,9 +118,10 @@ exports.updateUserrById = async (req, res) => {
 };
 
 exports.getByIdUserrrr = async (req, res) => {
-  try {   
-    const ite = await UserModal.findById(req.params.id);    
+  try {
+    const ite = await UserModal.findById(req.params.id);
     res.status(200).json(ite);
-} catch (error) {
+  } catch (error) {
     res.status(404).json({ message: error.message });
-}}
+  }
+}

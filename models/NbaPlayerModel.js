@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Player = require('../models/PlayersStats');
+
 
 
 const DataSchema = mongoose.Schema({
@@ -7,7 +9,7 @@ const DataSchema = mongoose.Schema({
         type: Date
 
     },
-    players: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Player',default:0}]
+    players: [Player.schema]
 
 });
 

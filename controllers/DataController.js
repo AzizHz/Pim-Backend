@@ -26,7 +26,17 @@ const url2 = 'https://stats.nba.com/stats/playerindex?College=&Country=&DraftPic
 const url = 'https://stats.nba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=1&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2022-23&SeasonSegment=&SeasonType=Regular Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=';
 
 
+exports.lastData = async (req, res) => {
+    try {
+        data = await Data.findOne({}, null, { sort: { _id: -1 } });
+        console.log(data)
+        res.send(data)
+    }
+    catch {
+        console.log('error')
+    }
 
+}
 
 
 
@@ -96,10 +106,8 @@ exports.getData = async (req, res) => {
             // Convert the array of JSON objects to a JSON string
             const jsonString = JSON.stringify(playersStat);
 
-
             new Data({
                 DATE: Date.now(),
-
                 players: playersStat
             }).save()
                 .then(data => {
