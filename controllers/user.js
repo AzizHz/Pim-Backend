@@ -1,6 +1,5 @@
 const UserModal = require('../models/user');
-const PlayerModal = require('../models/player');
-const Data = require('../models/NbaPlayerModel')
+const Data = require('../models/dataModel')
 
 
 exports.getUsers = async (req, res) => {

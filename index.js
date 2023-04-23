@@ -8,7 +8,6 @@ const bodyParser = require('body-parser')
 const userRouter = require('./routes/user.js');
 const cookieParser = require('cookie-parser');
 const resultsRouter = require('./routes/results.js');
-const playerRouter = require('./routes/player.js');
 const playersRouter = require('./routes/playersStats.js');
 const DataRouter = require('./routes/DataRouter.js');
 
@@ -24,7 +23,6 @@ const CONNECTION_URL = process.env.CONNECTION_URL;
 
 app.use(cookieParser());
 app.use("/user", userRouter);
-app.use("/player", playerRouter);
 app.use("/players", playersRouter);
 app.use("/results", resultsRouter)
 app.use("/Data", DataRouter)

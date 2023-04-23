@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Player = require('../models/PlayersStats');
+const Player = require('./PlayersStats');
 
 
 
@@ -13,3 +13,5 @@ const DataSchema = mongoose.Schema({
 
 });
 
+
+module.exports = mongoose.model("Data", DataSchema);

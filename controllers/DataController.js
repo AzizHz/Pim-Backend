@@ -1,12 +1,6 @@
-const Data = require('../models/NbaPlayerModel');
-
-
-
+const Data = require('../models/dataModel');
 const axios = require('axios');
-const express = require('express');
 
-const player = require('../models/player');
-const router = express.Router();
 
 const config = {
     headers: {
