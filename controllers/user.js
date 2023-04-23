@@ -1,5 +1,6 @@
 const UserModal = require('../models/user');
 const Data = require('../models/dataModel')
+const GameWeekRank = require('../models/GameWeekRank');
 
 
 exports.getUsers = async (req, res) => {
@@ -15,19 +16,15 @@ exports.getUsers = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   try {
-
     await UserModal.findByIdAndDelete(req.params.id);
     res.status(200).json("user deleted");
   } catch (error) {
-
     res.status(404).json({ message: error.message });
   }
 }
 
 exports.addPlayerToTeam = async (req, res) => {
   try {
-
-
     const players = [req.params.playerId1, req.params.playerId2, req.params.playerId3, req.params.playerId4, req.params.playerId5]
     data = await Data.findOne({}, null, { sort: { _id: -1 } });
 
@@ -124,3 +121,60 @@ exports.getByIdUserrrr = async (req, res) => {
     res.status(404).json({ message: error.message });
   }
 }
+
+exports.browseTeamAttribute = async (req, res) => {
+  try {
+    const user = await UserModal.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    let totalPoints = 0;
+    user.team.forEach((player) => {
+      console.log(player.NBA_FANTASY_PTS)
+      totalPoints += player.NBA_FANTASY_PTS;
+    });
+    res.status(200).json({totalPoints});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.leaderboardGameWeek = async (req, res) => {
+  try {
+    const users = await UserModal.find();
+    let usersWithTotalPoints = [];
+    users.forEach((user) => {
+      let totalPoints = 0;
+      user.team.forEach((player) => {
+        totalPoints += player.NBA_FANTASY_PTS;
+      });
+      usersWithTotalPoints.push({id: user.id,nickname: user.nickname, totalPoints: totalPoints});
+      user.rankpoints += totalPoints; // Increment rankpoints for the user
+      user.save();
+    });
+    let num=1;
+    const GameWeeknum = await GameWeekRank.find();
+    GameWeeknum.forEach((gameweeks)=>
+    {
+      num = gameweeks.GameWeekNumber + 1
+    });
+    console.log(num);
+    const gm = await GameWeekRank.create({ 
+      GameWeekNumber: num,
+      Gameweek: usersWithTotalPoints,
+    });
+    usersWithTotalPoints.sort((a, b) => {
+      return b.totalPoints - a.totalPoints;
+    });
+    res.status(200).json(gm);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.GlobalRank = async (req, res) => {
+  try {
+    const users = await UserModal.find().sort({ rankpoints: -1 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
