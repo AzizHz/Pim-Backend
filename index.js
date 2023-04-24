@@ -27,13 +27,7 @@ app.use("/players", playersRouter);
 app.use("/results", resultsRouter)
 app.use("/Data", DataRouter)
 
-
-
 const PORT = process.env.PORT || 3001;
-
-app.get('/uploads/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, `./uploads/${req.params.id}`));
-});
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => app.listen(PORT, () => {
