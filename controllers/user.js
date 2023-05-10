@@ -86,6 +86,7 @@ exports.signup = async (req, res) => {
     res.status(200).json({ result });
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error)
   }
 };
 
@@ -177,4 +178,15 @@ exports.GlobalRank = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+}
+
+exports.getUserByAccountPk= async (req, res) => {
+  var accountpk = req.params.accountpk;
+  UserModal.find({accountpk : accountpk})
+  .then(user => {
+    res.send(user)
+})
+.catch(err => {
+  res.status(500).send({message : err.message})
+})
+}
